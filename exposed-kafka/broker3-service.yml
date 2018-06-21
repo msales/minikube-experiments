@@ -1,0 +1,18 @@
+# see https://github.com/Yolean/kubernetes-kafka/blob/master/kafka/20dns.yml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kafka3
+  name: broker3
+  namespace: kafka
+spec:
+  type: NodePort
+  ports:
+  - name: broker-port
+    port: 30093
+    nodePort: 30093
+    #targetPort: 30091
+  #clusterIP: None
+  selector:
+    app: kafka3

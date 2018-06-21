@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka2
+  namespace: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka2 # has to match .spec.template.metadata.labels
+  serviceName: "broker2"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: kafka2 # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - env:
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#objectfieldselector-v1-core
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#podspec-v1-core
+#        - name: KAFKA_ADVERTISED_HOST_NAME
+#          valueFrom:
+#            fieldRef:
+#              #fieldPath: statefulset.kafka/pod-name
+#              fieldPath: status.podIP
+#              # metadata.name # status.podIP
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: "broker2.kafka.svc.cluster.local"
+        #- name: HOSTNAME_COMMAND
+        #  value: "echo $(hostname)'.broker.default.svc.cluster.local'"
+          # ip-ad-re-ss.namespace.pod.cluster.local
+        - name: KAFKA_ADVERTISED_PORT
+          value: "30092"
+        - name: KAFKA_PORT
+          value: "30092"
+        - name: KAFKA_BROKER_ID
+          value: "2"
+        #- name: BROKER_ID_COMMAND
+          #value: "ifconfig |grep 'inet addr:' |head -n1 | awk '{print $2}' | awk -F. '{print "100"$4}'"
+          #value: "hostname |awk -F- '{print \"200\"$2}'"
+        #  value: "echo ${HOSTNAME##*-}"
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          #value: 192.168.99.100:30181
+          value: "$(ZOOKEEPER_SERVICE_HOST):$(ZOOKEEPER_SERVICE_PORT)"
+        #- name: KAFKA_CREATE_TOPICS
+        #  value: "test-topic:3:3:compact"
+        - name: KAFKA_MESSAGE_MAX_BYTES
+          value: "2000000"
+        #- name: LOG4J_LOGGER_KAFKA_AUTHORIZER_LOGGER
+        #  value: "DEBUG"
+        name: kafka2
+        image: wurstmeister/kafka
+        imagePullPolicy: IfNotPresent
+        ports:
+        # needs same port inside + outside!
+        - containerPort: 30092
+          name: kafka

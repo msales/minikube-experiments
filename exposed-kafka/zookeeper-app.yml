@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper
+  namespace: kafka
+spec:
+  selector:
+    matchLabels:
+      app: zookeeper # has to match .spec.template.metadata.labels
+  serviceName: "zookeeper"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zookeeper # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: zookeeper
+        image: wurstmeister/zookeeper
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 30181
+          name: zookeeper
+        - containerPort: 2888
+          name: internal
+        - containerPort: 3888
+          name: leader-election
+
