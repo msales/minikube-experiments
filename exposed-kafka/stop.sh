@@ -7,3 +7,5 @@ done
 for p in zookeeper kafka1 kafka2 kafka3; do
   kubectl delete -f ${p}-app.yml
 done
+
+kubectl delete namespace kafka

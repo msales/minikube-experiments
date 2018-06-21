@@ -1,5 +1,7 @@
 #!/bin/bash
 
+kubectl create namespace kafka
+
 for s in zookeeper broker1 broker2 broker3; do
   kubectl create -f ${s}-service.yml
 done
