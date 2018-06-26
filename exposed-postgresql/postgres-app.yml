@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  #namespace: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres # has to match .spec.template.metadata.labels
+  serviceName: "postgres"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: postgres # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - env:
+        # see https://hub.docker.com/r/library/postgres/
+        - name: POSTGRES_PASSWORD
+          value: "password"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_DB
+          value: "mydb"
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#podspec-v1-core
+#        - name: KAFKA_ADVERTISED_HOST_NAME
+#          valueFrom:
+#            fieldRef:
+#              #fieldPath: statefulset.kafka/pod-name
+#              fieldPath: status.podIP
+#              # metadata.name # status.podIP
+#        - name: HOSTNAME_COMMAND
+#          value: "echo $(hostname)'.broker.default.svc.cluster.local'"
+#          # ip-ad-re-ss.namespace.pod.cluster.local
+#        - name: BROKER_ID_COMMAND
+#          #value: "ifconfig |grep 'inet addr:' |head -n1 | awk '{print $2}' | awk -F. '{print "100"$4}'"
+#          #value: "hostname |awk -F- '{print \"200\"$2}'"
+#          value: "echo ${HOSTNAME##*-}"
+#          #value: "$(ZOOKEEPER_SERVICE_HOST):$(ZOOKEEPER_SERVICE_PORT)"
+        name: postgres
+        image: postgres:alpine 
+        imagePullPolicy: Always # IfNotPresent
+        ports:
+        - containerPort: 30432
+          name: postgres
