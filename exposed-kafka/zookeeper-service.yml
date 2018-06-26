@@ -4,7 +4,6 @@ metadata:
   labels:
     app: zookeeper
   name: zookeeper
-  namespace: kafka
 spec:
   type: NodePort
   ports:

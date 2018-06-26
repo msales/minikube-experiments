@@ -1,7 +1,5 @@
 #!/bin/bash
 
-kubectl create namespace kafka
-
 for s in zookeeper broker1 broker2 broker3; do
   kubectl create -f ${s}-service.yml
 done
@@ -12,6 +10,6 @@ done
 
 echo "-------"
 echo "Add this to /etc/hosts to reach kafka externally:"
-echo "$(minikube ip)  broker1.kafka.svc.cluster.local broker2.kafka.svc.cluster.local broker3.kafka.svc.cluster.local"
-echo "   (you can also add zookeeper.kafka.svc.cluster.local if you want to talk to zookeeper)"
+echo "$(minikube ip)  broker1.default.svc.cluster.local broker2.default.svc.cluster.local broker3.default.svc.cluster.local"
+echo "   (you can also add zookeeper.default.svc.cluster.local if you want to talk to zookeeper)"
 

@@ -5,7 +5,6 @@ metadata:
   labels:
     app: kafka2
   name: broker2
-  namespace: kafka
 spec:
   type: NodePort
   ports:

@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: kafka3
-  namespace: kafka
 spec:
   selector:
     matchLabels:
@@ -26,7 +25,7 @@ spec:
 #              fieldPath: status.podIP
 #              # metadata.name # status.podIP
         - name: KAFKA_ADVERTISED_HOST_NAME
-          value: "broker3.kafka.svc.cluster.local"
+          value: "broker3.default.svc.cluster.local"
         #- name: HOSTNAME_COMMAND
         #  value: "echo $(hostname)'.broker.default.svc.cluster.local'"
           # ip-ad-re-ss.namespace.pod.cluster.local
